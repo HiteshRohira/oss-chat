@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
-import { ModelSelector } from "./ModelSelector";
 import { MessageActions } from "./MessageActions";
 import { ShareChatModal } from "./ShareChatModal";
+import { NewChatDialog } from "./NewChatDialog";
 
 interface ChatInterfaceProps {
   chatId: Id<"chats"> | null;
@@ -14,10 +14,6 @@ interface ChatInterfaceProps {
 export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showNewChatForm, setShowNewChatForm] = useState(!chatId);
-  const [newChatTitle, setNewChatTitle] = useState("");
-  const [selectedModel, setSelectedModel] = useState("gpt-4o-mini");
-  const [selectedProvider, setSelectedProvider] = useState("openai");
   const [editingMessageId, setEditingMessageId] =
     useState<Id<"messages"> | null>(null);
   const [editingContent, setEditingContent] = useState("");
@@ -31,7 +27,6 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
     chatId ? { chatId } : "skip",
   );
 
-  const createChat = useMutation(api.chats.createChat);
   const editMessage = useMutation(api.messages.editMessage);
   const sendMessage = useAction(api.messages.sendMessage);
 
@@ -39,31 +34,8 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  useEffect(() => {
-    setShowNewChatForm(!chatId);
-  }, [chatId]);
-
   // Check if any message is currently streaming
   const isStreaming = messages?.some((msg) => msg.isStreaming) || false;
-
-  const handleCreateChat = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newChatTitle.trim()) return;
-
-    try {
-      const newChatId = await createChat({
-        title: newChatTitle,
-        model: selectedModel,
-        provider: selectedProvider,
-      });
-
-      setNewChatTitle("");
-      setShowNewChatForm(false);
-      onChatCreated(newChatId);
-    } catch (error) {
-      console.error("Failed to create chat:", error);
-    }
-  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,46 +81,18 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
     setEditingContent("");
   };
 
-  if (showNewChatForm) {
+  if (!chatId) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="max-w-md w-full mx-4">
-          <div className="rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Start a New Chat
-            </h2>
-
-            <form onSubmit={handleCreateChat} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Chat Title
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter a title for your chat..."
-                  value={newChatTitle}
-                  onChange={(e) => setNewChatTitle(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  autoFocus
-                />
-              </div>
-
-              <ModelSelector
-                selectedModel={selectedModel}
-                selectedProvider={selectedProvider}
-                onModelChange={setSelectedModel}
-                onProviderChange={setSelectedProvider}
-              />
-
-              <button
-                type="submit"
-                disabled={!newChatTitle.trim()}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-              >
-                Create Chat
-              </button>
-            </form>
-          </div>
+        <div className="max-w-md w-full mx-4 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Welcome to OSS Chat
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Start a new conversation by clicking the "New Chat" button in the
+            sidebar.
+          </p>
+          <NewChatDialog onChatCreated={onChatCreated} />
         </div>
       </div>
     );

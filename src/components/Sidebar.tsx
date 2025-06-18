@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
-import { ModelSelector } from "./ModelSelector";
+import { NewChatDialog } from "./NewChatDialog";
 import {
   Sidebar,
   SidebarContent,
@@ -10,8 +9,7 @@ import {
   SidebarTrigger,
 } from "./ui/sidebar";
 import { Button } from "./ui/button";
-import { PlusCircle, SidebarIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { PlusCircle } from "lucide-react";
 
 interface Chat {
   _id: Id<"chats">;
@@ -34,32 +32,7 @@ export function AppSidebar({
   onSelectChat,
   onNewChat,
 }: SidebarProps) {
-  const [showNewChatForm, setShowNewChatForm] = useState(false);
-  const [newChatTitle, setNewChatTitle] = useState("");
-  const [selectedModel, setSelectedModel] = useState("gpt-4o-mini");
-  const [selectedProvider, setSelectedProvider] = useState("openai");
-
-  const createChat = useMutation(api.chats.createChat);
   const deleteChat = useMutation(api.chats.deleteChat);
-
-  const handleCreateChat = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newChatTitle.trim()) return;
-
-    try {
-      const chatId = await createChat({
-        title: newChatTitle,
-        model: selectedModel,
-        provider: selectedProvider,
-      });
-
-      setNewChatTitle("");
-      setShowNewChatForm(false);
-      onSelectChat(chatId);
-    } catch (error) {
-      console.error("Failed to create chat:", error);
-    }
-  };
 
   const handleDeleteChat = async (chatId: Id<"chats">, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -80,52 +53,8 @@ export function AppSidebar({
       {/* Header */}
       <SidebarHeader className="flex flex-row justify-between items-center">
         <SidebarTrigger variant={"secondary"} className="h-full" />
-        <Button asChild className="w-full">
-          <Link to={"/"}>
-            <PlusCircle />
-            New Chat
-          </Link>
-        </Button>
+        <NewChatDialog onChatCreated={onSelectChat} />
       </SidebarHeader>
-
-      {/* New Chat Form */}
-      {/* {showNewChatForm && (
-        <div className="p-4 border-b border-gray-200 bg-gray-50">
-          <form onSubmit={handleCreateChat} className="space-y-3">
-            <input
-              type="text"
-              placeholder="Chat title..."
-              value={newChatTitle}
-              onChange={(e) => setNewChatTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              autoFocus
-            />
-
-            <ModelSelector
-              selectedModel={selectedModel}
-              selectedProvider={selectedProvider}
-              onModelChange={setSelectedModel}
-              onProviderChange={setSelectedProvider}
-            />
-
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                className="flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
-              >
-                Create
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowNewChatForm(false)}
-                className="flex-1 bg-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-400 transition-colors text-sm"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      )} */}
 
       {/* Chat List */}
       <SidebarContent className="flex-1 overflow-y-auto">

@@ -1,3 +1,12 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Label } from "./ui/label";
+
 interface ModelSelectorProps {
   selectedModel: string;
   selectedProvider: string;
@@ -25,7 +34,12 @@ const MODELS = {
   ],
 };
 
-export function ModelSelector({ selectedModel, selectedProvider, onModelChange, onProviderChange }: ModelSelectorProps) {
+export function ModelSelector({
+  selectedModel,
+  selectedProvider,
+  onModelChange,
+  onProviderChange,
+}: ModelSelectorProps) {
   const handleProviderChange = (provider: string) => {
     onProviderChange(provider);
     // Set default model for the provider
@@ -36,37 +50,35 @@ export function ModelSelector({ selectedModel, selectedProvider, onModelChange, 
   };
 
   return (
-    <div className="space-y-2">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Provider
-        </label>
-        <select
-          value={selectedProvider}
-          onChange={(e) => handleProviderChange(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-        >
-          <option value="openai">OpenAI</option>
-          <option value="google">Google AI</option>
-          <option value="openrouter">OpenRouter</option>
-        </select>
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="provider-select">Provider</Label>
+        <Select value={selectedProvider} onValueChange={handleProviderChange}>
+          <SelectTrigger id="provider-select">
+            <SelectValue placeholder="Select a provider" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="openai">OpenAI</SelectItem>
+            <SelectItem value="google">Google AI</SelectItem>
+            <SelectItem value="openrouter">OpenRouter</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Model
-        </label>
-        <select
-          value={selectedModel}
-          onChange={(e) => onModelChange(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-        >
-          {MODELS[selectedProvider as keyof typeof MODELS]?.map((model) => (
-            <option key={model.id} value={model.id}>
-              {model.name}
-            </option>
-          ))}
-        </select>
+      <div className="space-y-2">
+        <Label htmlFor="model-select">Model</Label>
+        <Select value={selectedModel} onValueChange={onModelChange}>
+          <SelectTrigger id="model-select">
+            <SelectValue placeholder="Select a model" />
+          </SelectTrigger>
+          <SelectContent>
+            {MODELS[selectedProvider as keyof typeof MODELS]?.map((model) => (
+              <SelectItem key={model.id} value={model.id}>
+                {model.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
