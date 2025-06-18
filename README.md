@@ -1,15 +1,15 @@
 # oss-chat
-  
-This is a project built with [Chef](https://chef.convex.dev) using [Convex](https://convex.dev) as its backend.
-  
+
+This is a project built with [Convex](https://convex.dev) as its backend.
+
 This project is connected to the Convex deployment named [`colorless-jellyfish-419`](https://dashboard.convex.dev/d/colorless-jellyfish-419).
-  
+
 ## Project structure
-  
+
 The frontend code is in the `app` directory and is built with [Vite](https://vitejs.dev/).
-  
+
 The backend code is in the `convex` directory.
-  
+
 `npm run dev` will start the frontend and backend servers.
 
 ## App authentication
