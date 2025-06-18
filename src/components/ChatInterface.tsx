@@ -8,6 +8,7 @@ import { NewChatDialog } from "./NewChatDialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { Markdown } from "./ui/markdown";
 import { ArrowUp, LoaderCircle, Share } from "lucide-react";
 
 interface ChatInterfaceProps {
@@ -177,7 +178,11 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
                   </div>
                 ) : (
                   <>
-                    <div className="whitespace-pre-wrap">{msg.content}</div>
+                    {msg.role === "assistant" ? (
+                      <Markdown>{msg.content}</Markdown>
+                    ) : (
+                      <div className="whitespace-pre-wrap">{msg.content}</div>
+                    )}
                     {msg.isEdited && (
                       <div className="text-xs opacity-70 mt-1">(edited)</div>
                     )}
@@ -239,7 +244,7 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
             disabled={isLoading || isStreaming}
-            className="h-36 p-2 focus:outline-none"
+            className="h-24 p-2 focus:outline-none"
           />
           <Button
             type="submit"
