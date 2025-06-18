@@ -25,7 +25,7 @@ export default function App() {
                 <Unauthenticated>
                   <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-4">
                     <h2 className="text-xl font-semibold text-primary">
-                      AI Chat
+                      Oss-Chat
                     </h2>
                   </header>
                   <main className="flex-1 flex items-center justify-center p-8">
@@ -59,10 +59,8 @@ function Content() {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center">
-        <h1 className="text-5xl font-bold text-primary mb-4">AI Chat</h1>
-        <p className="text-xl text-secondary">
-          Chat with multiple AI models in one place
-        </p>
+        <h1 className="text-5xl font-bold text-primary mb-4">Oss-Chat</h1>
+        <p className="text-xl">Chat with multiple AI models in one place</p>
       </div>
       <SignInForm />
     </div>
