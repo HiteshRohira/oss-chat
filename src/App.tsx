@@ -10,7 +10,7 @@ import { SidebarProvider } from "./components/ui/sidebar";
 
 export default function App() {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="block">
       <Router>
         <Routes>
           <Route path="/shared/:shareToken" element={<SharedChatView />} />
