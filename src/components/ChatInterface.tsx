@@ -9,7 +9,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Markdown } from "./ui/markdown";
-import { ArrowUp, LoaderCircle, Share } from "lucide-react";
+import { ArrowUp, LoaderCircle, Share, Share2 } from "lucide-react";
+import { SignOutButton } from "@/SignOutButton";
 
 interface ChatInterfaceProps {
   chatId: Id<"chats"> | null;
@@ -120,14 +121,17 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
           </p>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowShareModal(true)}
-        >
-          <Share className="w-4 h-4" />
-          Share
-        </Button>
+        <div className="space-x-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowShareModal(true)}
+          >
+            <Share2 />
+          </Button>
+
+          <SignOutButton />
+        </div>
       </div>
 
       {/* Messages */}

@@ -30,36 +30,6 @@ export function ChatApp() {
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col w-full">
-        {/* Header */}
-        <header className="border-b px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button> */}
-            <h1 className="text-xl font-semibold">New Chat</h1>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-sm">{user?.email}</span>
-            <SignOutButton />
-          </div>
-        </header>
-
         {/* Chat Interface */}
         <div className="flex-1 overflow-hidden">
           <ChatInterface
