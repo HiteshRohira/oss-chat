@@ -5,6 +5,10 @@ import { Id } from "../../convex/_generated/dataModel";
 import { MessageActions } from "./MessageActions";
 import { ShareChatModal } from "./ShareChatModal";
 import { NewChatDialog } from "./NewChatDialog";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { ArrowUp, LoaderCircle, Share } from "lucide-react";
 
 interface ChatInterfaceProps {
   chatId: Id<"chats"> | null;
@@ -85,10 +89,8 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="max-w-md w-full mx-4 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Welcome to OSS Chat
-          </h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-2xl font-bold mb-4">Welcome to OSS Chat</h2>
+          <p className="text-muted-foreground mb-6">
             Start a new conversation by clicking the "New Chat" button in the
             sidebar.
           </p>
@@ -101,47 +103,36 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
   if (!chat || !messages) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-background">
       {/* Chat Header */}
-      <div className="border-b border-gray-200 p-4 flex items-center justify-between">
+      <div className="border-b p-4 flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">{chat.title}</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-lg font-semibold">{chat.title}</h2>
+          <p className="text-sm text-muted-foreground">
             {chat.provider} • {chat.model}
           </p>
         </div>
 
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => setShowShareModal(true)}
-          className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-            />
-          </svg>
+          <Share className="w-4 h-4" />
           Share
-        </button>
+        </Button>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 ? (
-          <div className="text-center text-gray-500 mt-8">
+          <div className="text-center text-muted-foreground mt-8">
             <p>No messages yet. Start the conversation!</p>
           </div>
         ) : (
@@ -153,34 +144,35 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
               <div
                 className={`max-w-[70%] rounded-lg px-4 py-2 relative group ${
                   msg.role === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-900"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-foreground"
                 }`}
               >
                 {editingMessageId === msg._id ? (
                   <div className="space-y-2">
-                    <textarea
+                    <Textarea
                       value={editingContent}
                       onChange={(e) => setEditingContent(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded resize-none text-gray-900"
+                      className="w-full resize-none"
                       rows={3}
                       autoFocus
                     />
                     <div className="flex gap-2">
-                      <button
+                      <Button
+                        size="sm"
                         onClick={() =>
                           handleEditMessage(msg._id, editingContent)
                         }
-                        className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
                       >
                         Save
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
                         onClick={cancelEditing}
-                        className="px-3 py-1 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
                       >
                         Cancel
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ) : (
@@ -225,10 +217,12 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
 
         {isLoading && !isStreaming && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 rounded-lg px-4 py-2">
+            <div className="bg-muted rounded-lg px-4 py-2">
               <div className="flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
-                <span className="text-gray-600">Starting response...</span>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-foreground"></div>
+                <span className="text-muted-foreground">
+                  Starting response...
+                </span>
               </div>
             </div>
           </div>
@@ -238,26 +232,29 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
       </div>
 
       {/* Message Input */}
-      <div className="border-t border-gray-200 p-4">
-        <form onSubmit={handleSendMessage} className="flex gap-2">
-          <input
-            type="text"
+      <div className="shadow-md rounded-lg w-2/3 mx-auto">
+        <form onSubmit={handleSendMessage} className="flex gap-2 relative">
+          <Textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
             disabled={isLoading || isStreaming}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+            className="h-36 p-2 focus:outline-none"
           />
-          <button
+          <Button
             type="submit"
             disabled={!message.trim() || isLoading || isStreaming}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-2 top-2 px-3"
           >
-            {isStreaming ? "Streaming..." : "Send"}
-          </button>
+            {isStreaming ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              <ArrowUp />
+            )}
+          </Button>
         </form>
         {isStreaming && (
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             AI is generating a response...
           </p>
         )}
