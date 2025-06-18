@@ -6,36 +6,42 @@ import { Toaster } from "sonner";
 import { ChatApp } from "./components/ChatApp";
 import { SharedChatView } from "./components/SharedChatView";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { SidebarProvider } from "./components/ui/sidebar";
 
 export default function App() {
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col bg-gray-50">
+    <SidebarProvider>
+      <Router>
         <Routes>
           <Route path="/shared/:shareToken" element={<SharedChatView />} />
-          <Route path="/*" element={
-            <>
-              <Authenticated>
-                <ChatApp />
-              </Authenticated>
-              
-              <Unauthenticated>
-                <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-4">
-                  <h2 className="text-xl font-semibold text-primary">AI Chat</h2>
-                </header>
-                <main className="flex-1 flex items-center justify-center p-8">
-                  <div className="w-full max-w-md mx-auto">
-                    <Content />
-                  </div>
-                </main>
-              </Unauthenticated>
-            </>
-          } />
+          <Route
+            path="/*"
+            element={
+              <>
+                <Authenticated>
+                  <ChatApp />
+                </Authenticated>
+
+                <Unauthenticated>
+                  <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-4">
+                    <h2 className="text-xl font-semibold text-primary">
+                      AI Chat
+                    </h2>
+                  </header>
+                  <main className="flex-1 flex items-center justify-center p-8">
+                    <div className="w-full max-w-md mx-auto">
+                      <Content />
+                    </div>
+                  </main>
+                </Unauthenticated>
+              </>
+            }
+          />
         </Routes>
-        
+
         <Toaster />
-      </div>
-    </Router>
+      </Router>
+    </SidebarProvider>
   );
 }
 

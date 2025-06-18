@@ -18,15 +18,19 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
   const [newChatTitle, setNewChatTitle] = useState("");
   const [selectedModel, setSelectedModel] = useState("gpt-4o-mini");
   const [selectedProvider, setSelectedProvider] = useState("openai");
-  const [editingMessageId, setEditingMessageId] = useState<Id<"messages"> | null>(null);
+  const [editingMessageId, setEditingMessageId] =
+    useState<Id<"messages"> | null>(null);
   const [editingContent, setEditingContent] = useState("");
   const [showShareModal, setShowShareModal] = useState(false);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
+
   const chat = useQuery(api.chats.getChat, chatId ? { chatId } : "skip");
-  const messages = useQuery(api.chats.getChatMessages, chatId ? { chatId } : "skip");
-  
+  const messages = useQuery(
+    api.chats.getChatMessages,
+    chatId ? { chatId } : "skip",
+  );
+
   const createChat = useMutation(api.chats.createChat);
   const editMessage = useMutation(api.messages.editMessage);
   const sendMessage = useAction(api.messages.sendMessage);
@@ -40,7 +44,7 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
   }, [chatId]);
 
   // Check if any message is currently streaming
-  const isStreaming = messages?.some(msg => msg.isStreaming) || false;
+  const isStreaming = messages?.some((msg) => msg.isStreaming) || false;
 
   const handleCreateChat = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +56,7 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
         model: selectedModel,
         provider: selectedProvider,
       });
-      
+
       setNewChatTitle("");
       setShowNewChatForm(false);
       onChatCreated(newChatId);
@@ -82,7 +86,10 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
     }
   };
 
-  const handleEditMessage = async (messageId: Id<"messages">, newContent: string) => {
+  const handleEditMessage = async (
+    messageId: Id<"messages">,
+    newContent: string,
+  ) => {
     try {
       await editMessage({ messageId, newContent });
       setEditingMessageId(null);
@@ -104,13 +111,13 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
 
   if (showNewChatForm) {
     return (
-      <div className="h-full flex items-center justify-center bg-gray-50">
+      <div className="h-full flex items-center justify-center">
         <div className="max-w-md w-full mx-4">
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="rounded-lg shadow-lg p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Start a New Chat
             </h2>
-            
+
             <form onSubmit={handleCreateChat} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -125,14 +132,14 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
                   autoFocus
                 />
               </div>
-              
+
               <ModelSelector
                 selectedModel={selectedModel}
                 selectedProvider={selectedProvider}
                 onModelChange={setSelectedModel}
                 onProviderChange={setSelectedProvider}
               />
-              
+
               <button
                 type="submit"
                 disabled={!newChatTitle.trim()}
@@ -165,13 +172,23 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
             {chat.provider} • {chat.model}
           </p>
         </div>
-        
+
         <button
           onClick={() => setShowShareModal(true)}
           className="flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+            />
           </svg>
           Share
         </button>
@@ -207,7 +224,9 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
                     />
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleEditMessage(msg._id, editingContent)}
+                        onClick={() =>
+                          handleEditMessage(msg._id, editingContent)
+                        }
                         className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
                       >
                         Save
@@ -224,9 +243,7 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
                   <>
                     <div className="whitespace-pre-wrap">{msg.content}</div>
                     {msg.isEdited && (
-                      <div className="text-xs opacity-70 mt-1">
-                        (edited)
-                      </div>
+                      <div className="text-xs opacity-70 mt-1">(edited)</div>
                     )}
                     {msg.role === "assistant" && (
                       <div className="flex items-center justify-between mt-1">
@@ -243,13 +260,17 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
                         )}
                       </div>
                     )}
-                    
+
                     <MessageActions
                       messageId={msg._id}
                       role={msg.role}
                       content={msg.content}
                       isStreaming={msg.isStreaming}
-                      onEdit={msg.role === "user" ? () => startEditing(msg._id, msg.content) : undefined}
+                      onEdit={
+                        msg.role === "user"
+                          ? () => startEditing(msg._id, msg.content)
+                          : undefined
+                      }
                     />
                   </>
                 )}
@@ -257,8 +278,8 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
             </div>
           ))
         )}
-        
-        {(isLoading && !isStreaming) && (
+
+        {isLoading && !isStreaming && (
           <div className="flex justify-start">
             <div className="bg-gray-100 rounded-lg px-4 py-2">
               <div className="flex items-center space-x-2">
@@ -268,7 +289,7 @@ export function ChatInterface({ chatId, onChatCreated }: ChatInterfaceProps) {
             </div>
           </div>
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
 
