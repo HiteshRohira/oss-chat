@@ -32,8 +32,12 @@ const MODELS = {
     // { id: "anthropic/claude-3-opus", name: "Claude 3 Opus" },
     // { id: "anthropic/claude-3-sonnet", name: "Claude 3 Sonnet" },
     { id: "anthropic/claude-3-haiku", name: "Claude 3 Haiku" },
-    { id: "meta-llama/llama-2-70b-chat", name: "Llama 2 70B" },
+    { id: "meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3 70B" },
     { id: "mistralai/mixtral-8x7b-instruct", name: "Mixtral 8x7B" },
+    {
+      id: "deepseek/deepseek-r1-0528-qwen3-8b:free",
+      name: "Deepseek R1 Qwen3 8B",
+    },
   ],
 };
 
