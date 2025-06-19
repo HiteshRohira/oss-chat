@@ -22,12 +22,15 @@ const MODELS = {
     { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo" },
   ],
   google: [
-    { id: "gemini-pro", name: "Gemini Pro" },
-    { id: "gemini-pro-vision", name: "Gemini Pro Vision" },
+    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash" },
+    {
+      id: "gemini-2.5-flash-lite-preview-06-17",
+      name: "Gemini 2.5 Flash Lite",
+    },
   ],
   openrouter: [
-    { id: "anthropic/claude-3-opus", name: "Claude 3 Opus" },
-    { id: "anthropic/claude-3-sonnet", name: "Claude 3 Sonnet" },
+    // { id: "anthropic/claude-3-opus", name: "Claude 3 Opus" },
+    // { id: "anthropic/claude-3-sonnet", name: "Claude 3 Sonnet" },
     { id: "anthropic/claude-3-haiku", name: "Claude 3 Haiku" },
     { id: "meta-llama/llama-2-70b-chat", name: "Llama 2 70B" },
     { id: "mistralai/mixtral-8x7b-instruct", name: "Mixtral 8x7B" },
