@@ -79,12 +79,6 @@ export function AppSidebar({
                     <h3 className="font-medium text-gray-900 truncate">
                       {chat.title}
                     </h3>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {chat.provider} • {chat.model}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {new Date(chat._creationTime).toLocaleDateString()}
-                    </p>
                   </div>
 
                   <button

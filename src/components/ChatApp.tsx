@@ -31,7 +31,7 @@ export function ChatApp() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col w-full">
         {/* Chat Interface */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden bg-background">
           <ChatInterface
             chatId={selectedChatId}
             onChatCreated={setSelectedChatId}
