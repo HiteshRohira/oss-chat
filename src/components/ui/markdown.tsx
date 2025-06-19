@@ -17,7 +17,7 @@ export function Markdown({ children, className }: MarkdownProps) {
         components={{
           // Headings
           h1: ({ children }) => (
-            <h1 className="text-2xl font-bold mb-4 text-foreground">
+            <h1 className="text-2xl font-bold mb-4 last:mb-0 text-foreground">
               {children}
             </h1>
           ),
@@ -49,17 +49,19 @@ export function Markdown({ children, className }: MarkdownProps) {
 
           // Paragraphs
           p: ({ children }) => (
-            <p className="mb-4 leading-relaxed text-foreground">{children}</p>
+            <p className="mb-4 last:mb-0 leading-relaxed text-foreground">
+              {children}
+            </p>
           ),
 
           // Lists
           ul: ({ children }) => (
-            <ul className="list-disc list-inside mb-4 space-y-1 text-foreground">
+            <ul className="list-disc list-inside mb-4 last:mb-0 space-y-1 text-foreground">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="list-decimal list-inside mb-4 space-y-1 text-foreground">
+            <ol className="list-decimal list-inside mb-4 last:mb-0 space-y-1 text-foreground">
               {children}
             </ol>
           ),
@@ -67,7 +69,7 @@ export function Markdown({ children, className }: MarkdownProps) {
 
           // Blockquotes
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-muted-foreground pl-4 italic mb-4 text-muted-foreground">
+            <blockquote className="border-l-4 border-muted-foreground pl-4 italic mb-4 last:mb-0 text-muted-foreground">
               {children}
             </blockquote>
           ),
